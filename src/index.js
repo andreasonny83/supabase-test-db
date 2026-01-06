@@ -1,21 +1,25 @@
-import { Client } from 'pg';
+import { Pool } from 'pg';
 import 'dotenv/config';
 
-async function testConnection() {
+function pool() {
   try {
     console.log('Attempting to connect to the database at:', process.env.DB_HOST, 'on port:', process.env.DB_PORT);
-    const client = new Client({
+    const client = new Pool({
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DBUSER,
       password: process.env.DBPASSWORD,
     });
 
-    await client.connect();
-    console.log('Database connection established successfully.');
+    return client;
   } catch (err) {
     console.error('Unexpected error:', err.message);
   }
 }
 
-testConnection();
+async function listRestaurants() {
+  const res = await pool.query('select id, name from restaurants order by name');
+  console.log(res.rows);
+}
+
+listRestaurants();
