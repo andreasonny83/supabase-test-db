@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 
-const supabase = createClient(process.env.DB_URL, `${process.env.DBUSER}:${process.env.DBPASSWORD}`);
-
 async function testConnection() {
   try {
+    console.log('Attempting to connect to the database at:', process.env.DB_URL);
+    const supabase = createClient(process.env.DB_URL, `${process.env.DBUSER}:${process.env.DBPASSWORD}`);
     // Test a simple query on auth.users (always exists)
     const { data, error } = await supabase.auth.getUser(); // server-side: use service key
     if (error) {
